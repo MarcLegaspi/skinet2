@@ -1,0 +1,82 @@
+<div class="container">
+    <div class="row">
+        <div class="col-3">
+            <h5 class="text-warning">
+                Sorting
+            </h5>
+            <select class="custom-select mt-2 mb-3" (change)="onSortSelected($event.target.value)">
+                <option [value]="sortItem.value" *ngFor="let sortItem of sortItems">
+                    {{ sortItem.name }}</option>
+            </select>
+            <h5 class="text-warning">
+                Brands
+            </h5>
+            <ul class="list-group my-3">
+                <li class="list-group-item" *ngFor="let brand of brands"
+                    [class.active]="brand.id === shopParams.brandId" (click)="onBrandSelected(brand.id)">{{ brand.name
+                    }}</li>
+            </ul>
+            <h5 class="text-warning">
+                Types
+            </h5>
+            <ul class="list-group my-3">
+                <li class="list-group-item" *ngFor="let productType of productTypes"
+                    [class.active]="productType.id === shopParams.typeId" (click)="onTypeSelected(productType.id)">
+                    {{ productType.name }}
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-9">
+            <div class="d-flex align-items-center justify-content-between pb-2">
+                <!-- <header>
+                    <span *ngIf="totalItems && totalItems > 0">Showing 
+                        <strong>{{ ((shopParams.pageIndex-1) * shopParams.pageSize) + 1 }} - 
+                            {{ shopParams.pageIndex * shopParams.pageSize
+                                > totalItems
+                                ? totalItems
+                                : shopParams.pageIndex * shopParams.pageSize }}
+                        </strong> of <strong>{{ totalItems }}</strong> Results
+                    </span>
+                    <span *ngIf="totalItems === 0">
+                        There are <b>0</b> results for this filter
+                    </span>
+                </header> -->
+                <app-pagination-header
+                    [totalItems]="totalItems"
+                    [pageIndex]="shopParams.pageIndex"
+                    [pageSize]="shopParams.pageSize"
+                ></app-pagination-header>
+                <div class="form-inline mt-2">
+                    <input type="text" (keyup.enter)="onSearch()" #search class="form-control mr-2" style="width: 300px;" placeholder="Search" [(ngModel)]="searchText">
+                    <button class="btn btn-outline-primary" (click)="onSearch()">Search</button>
+                    <button class="btn btn-outline-success ml-2" (click)="onReset()">Reset</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4 mb-4" *ngFor="let item of products">
+                    <app-product-item [product]="item"></app-product-item>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" *ngIf="totalItems && totalItems > 0">
+                <app-pagination
+                    [itemsPerPage] = "shopParams.pageSize"
+                    (pageChanged)="onPageChanged($event)"
+                    [totalItems]="totalItems"
+                ></app-pagination>
+                <!-- <pagination 
+                    [boundaryLinks]="true" 
+                    [totalItems]="totalItems"
+                    (pageChanged)="onPageChanged($event.page)"
+                    [itemsPerPage] = "shopParams.pageSize"
+                    previousText="&lsaquo;" 
+                    nextText="&rsaquo;"
+                    firstText="&laquo;" 
+                    lastText="&raquo;">
+                </pagination> -->
+            </div>
+        </div>
+    </div>
+</div>
